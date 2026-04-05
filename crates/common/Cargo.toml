@@ -1,0 +1,16 @@
+[package]
+name = "common"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+anyhow.workspace = true
+log.workspace = true
+
+
+bitwarden-client = { path = "../bitwarden_client" }
+secret-store = { path = "../secret-store" }
+
+ssh-agent-lib = { version = "0.5.2", features = ["tokio"] }
+signature = "2.2.0"
+async-trait = "0.1.89"

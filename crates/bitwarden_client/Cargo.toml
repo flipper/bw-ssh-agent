@@ -1,0 +1,29 @@
+[package]
+name = "bitwarden-client"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+serde.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+log.workspace = true
+
+pbkdf2 = { version = "0.13.0-rc.10", features = ["hmac", "sha2", "kdf"] }
+base64 = "0.22.1"
+hmac = "0.13.0"
+sha2 = "0.11.0"
+aes = "0.8.4"
+cbc = "0.1.2"
+hkdf = "0.13.0"
+url = "2.5.8"
+http = "1.4.0"
+reqwest = { version = "0.13.2", features = ["json", "form"] }
+serde_with = { version = "3.18.0", features = ["base64"] }
+serde_json = "1.0.149"
+generic-array = "0.14.7"
+ctutils = "0.4.2"
+
+rsa = "0.10.0-rc.17"
+sha1 = "0.11.0"
+rand = "0.10.0"

@@ -1,0 +1,18 @@
+[package]
+name = "bw-ssh-agent"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+bitwarden-client = { path = "../bitwarden_client"}
+common = { path = "../common" }
+tokio.workspace = true
+anyhow.workspace = true
+log.workspace = true
+simple_logger.workspace = true
+
+clap = { version = "4.6.0", features = ["derive"] }
+dialoguer = { version = "0.12.0", features = ["password", "zeroize"], default-features = false }
+dirs-next = "2.0.0"
+libsystemd = "0.7.2"
+zbus = "5.15.0"

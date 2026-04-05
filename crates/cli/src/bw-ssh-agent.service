@@ -1,0 +1,12 @@
+[Unit]
+Description=Bitwarden-backed SSH agent
+After=dbus.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+ExecStart=$BIN_PATH$ agent
+Restart=always
+
+[Install]
+WantedBy=default.target
