@@ -2,6 +2,7 @@
 name = "bw-ssh-agent"
 version = "1.0.0"
 edition = "2024"
+license = "AGPL-3.0-only"
 
 [dependencies]
 bitwarden-client = { path = "../bitwarden_client"}
