@@ -4,10 +4,11 @@
 
 It supports 2FA during login and supports custom Bitwarden server endpoints.
 
+This project is an unofficial SSH agent and is not affiliated with or endorsed by Bitwarden.
+
 ## Requirements
 
 - Linux
-- A Bitwarden account with SSH keys
 - Secret Service (usually already available on most Linux desktop setups)
 
 `systemd` is not required to use `bw-ssh-agent`, but this README uses it for the easiest setup.
