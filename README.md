@@ -2,7 +2,7 @@
 
 `bw-ssh-agent` is a lightweight SSH agent that uses your Bitwarden SSH keys.
 
-It supports 2FA during login and custom Bitwarden server endpoints.
+It supports email-based 2FA during login and custom Bitwarden server endpoints.
 
 This project is unofficial and is not affiliated with or endorsed by Bitwarden.
 
@@ -73,7 +73,7 @@ This project is unofficial and is not affiliated with or endorsed by Bitwarden.
 
 ### `bw-ssh-agent login`
 
-Log in to Bitwarden, including 2FA.
+Log in to Bitwarden, including email-based 2FA.
 
 Optional flags:
 
@@ -99,6 +99,10 @@ Optional flag:
 Automatic setup for systemd: installs and starts `bw-ssh-agent` as a user service.
 
 After running install, reboot your system to apply all changes.
+
+### `bw-ssh-agent uninstall`
+
+Remove the installed user service setup.
 
 ## Custom Bitwarden Endpoints
 
