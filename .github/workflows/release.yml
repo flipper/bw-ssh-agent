@@ -8,6 +8,9 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
+  artifact-metadata: write
 
 jobs:
   build:
@@ -59,6 +62,10 @@ jobs:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_name }}
           if-no-files-found: error
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: ${{ matrix.artifact_name }}
 
   release:
     name: Create GitHub release
