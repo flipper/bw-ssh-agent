@@ -15,53 +15,59 @@ This project is unofficial and is not affiliated with or endorsed by Bitwarden.
 
 1. Install `bw-ssh-agent` (choose one method):
 
-<details>
-<summary>Install manually (download binary)</summary>
+   <details>
+   <summary>Install manually (download binary)</summary>
 
-1. Download the release binary for your system (`bw-ssh-agent-(os)-(arch)`).
-2. Move it to `$HOME/.local/bin` and rename it to `bw-ssh-agent`:
+   1. Download the release binary for your system (`bw-ssh-agent-(os)-(arch)`).
+   2. Move it to `$HOME/.local/bin` and rename it to `bw-ssh-agent`:
 
-```bash
-mkdir -p "$HOME/.local/bin"
-mv /path/to/downloaded/binary "$HOME/.local/bin/bw-ssh-agent"
-chmod +x "$HOME/.local/bin/bw-ssh-agent"
-```
+      ```bash
+      mkdir -p "$HOME/.local/bin"
+      mv /path/to/downloaded/binary "$HOME/.local/bin/bw-ssh-agent"
+      chmod +x "$HOME/.local/bin/bw-ssh-agent"
+      ```
 
-</details>
+   Make sure `$HOME/.local/bin` is in your `PATH`. If `bw-ssh-agent` is not found, restart your shell or run:
 
-<details>
-<summary>Install with <a href="https://mise.jdx.dev/">mise</a></summary>
+      ```bash
+      export PATH="$HOME/.local/bin:$PATH"
+      ```
 
-```bash
-mise use -g github:flipper/bw-ssh-agent
-```
+   </details>
 
-</details>
+   <details>
+   <summary>Install with <a href="https://mise.jdx.dev/">mise</a></summary>
+
+   ```bash
+   mise use -g github:flipper/bw-ssh-agent
+   ```
+
+   </details>
 
 2. Log in:
 
-```bash
-bw-ssh-agent login
-```
+   ```bash
+   bw-ssh-agent login
+   ```
 
 3. Set up background service (systemd, recommended):
 
-```bash
-bw-ssh-agent install
-```
+   ```bash
+   bw-ssh-agent install
+   ```
+
+   <details>
+   <summary>Other init systems</summary>
+
+   Configure your init/service manager to run this in the background:
+
+   ```bash
+   bw-ssh-agent agent
+   ```
+
+   </details>
 
 4. Reboot to apply all changes.
-
-<details>
-<summary>Other init systems</summary>
-
-Configure your init/service manager to run this in the background:
-
-```bash
-bw-ssh-agent agent
-```
-
-</details>
 
 ## Commands
 
@@ -116,9 +122,3 @@ bw-ssh-agent login \
 ## Notes
 
 - Socket path: `$XDG_RUNTIME_DIR/bw-ssh-agent.sock`
-- Make sure `$HOME/.local/bin` is in your `PATH`.
-- If command not found, restart your shell or run:
-
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
