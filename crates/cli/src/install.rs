@@ -3,17 +3,8 @@ use std::io::Write;
 use anyhow::anyhow;
 use tokio::process::Command;
 use zbus::Connection;
+use crate::consts::{DEFAULT_SSH_AGENT_NAME, DEFAULT_SSH_AGENT_SOCKET, ENVIRONMENT_SSH_AGENT_NAME, ENVIRONMENT_SSH_AGENT_TEMPLATE, PLASMA_WORKSPACE_ENV_SCRIPT_PATH, PLASMA_WORKSPACE_ENV_SCRIPT_PATH_DISABLED, UNIT_SERVICE_TEMPLATE, UNIT_SYSTEMD_NAME};
 use crate::systemd_manager::SystemdManagerProxy;
-
-const DEFAULT_SSH_AGENT_NAME: &str = "ssh-agent.service";
-const DEFAULT_SSH_AGENT_SOCKET: &str = "ssh-agent.socket";
-
-const UNIT_SYSTEMD_NAME: &str = "bw-ssh-agent.service";
-
-const UNIT_SERVICE_TEMPLATE: &str = include_str!("bw-ssh-agent.service");
-
-const ENVIRONMENT_SSH_AGENT_NAME: &str = "10-bw-ssh-agent.conf";
-const ENVIRONMENT_SSH_AGENT_TEMPLATE: &str = include_str!("bw-ssh-agent.conf");
 
 async fn install_systemd_service() -> anyhow::Result<()> {
     let config_dir = dirs_next::config_dir().expect("config dir not found");
@@ -75,46 +66,51 @@ async fn enable_and_restart_systemd_service() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn remove_plasma_workspace_ssh_env() -> anyhow::Result<()> {
-    let path = std::path::Path::new("/etc/xdg/plasma-workspace/env/ssh-agent.sh");
+async fn disable_plasma_workspace_ssh_env() -> anyhow::Result<()> {
+    let path = std::path::Path::new(PLASMA_WORKSPACE_ENV_SCRIPT_PATH);
+    let new_path = std::path::Path::new(PLASMA_WORKSPACE_ENV_SCRIPT_PATH_DISABLED);
 
     if !path.exists() {
         return Ok(());
     }
 
-    log::info!("Removing plasma workspace ssh env");
+    log::info!("Disabling plasma workspace ssh env");
 
-    if std::fs::remove_file(path).is_ok() {
+    if std::fs::rename(path, new_path).is_ok() {
         return Ok(());
     }
 
     let status = Command::new("pkexec")
-        .arg("rm")
-        .arg("-f")
+        .arg("mv")
         .arg(path)
+        .arg(new_path)
         .status()
         .await?;
 
     if status.success() {
         Ok(())
     } else {
-        Err(anyhow!("Failed to delete ssh-agent env file"))
+        Err(anyhow!("Failed to disable ssh-agent env file"))
     }
 }
 
 async fn disable_default_ssh_agent() -> anyhow::Result<()> {
-    remove_plasma_workspace_ssh_env().await?;
+    disable_plasma_workspace_ssh_env().await?;
 
     let connection = Connection::session().await?;
     let proxy = SystemdManagerProxy::new(&connection).await?;
 
+    log::info!("Stopping {}", DEFAULT_SSH_AGENT_SOCKET);
     let _ = proxy.stop_unit(DEFAULT_SSH_AGENT_SOCKET, "replace").await;
+    log::info!("Stopping {}", DEFAULT_SSH_AGENT_NAME);
     let _ = proxy.stop_unit(DEFAULT_SSH_AGENT_NAME, "replace").await;
 
+    log::info!("Disabling {:?}", vec![DEFAULT_SSH_AGENT_SOCKET, DEFAULT_SSH_AGENT_NAME]);
     proxy
         .disable_unit_files(vec![DEFAULT_SSH_AGENT_SOCKET, DEFAULT_SSH_AGENT_NAME], false)
         .await?;
 
+    log::info!("Masking {:?}", vec![DEFAULT_SSH_AGENT_SOCKET, DEFAULT_SSH_AGENT_NAME]);
     proxy
         .mask_unit_files(
             vec![DEFAULT_SSH_AGENT_SOCKET, DEFAULT_SSH_AGENT_NAME],

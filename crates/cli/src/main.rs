@@ -1,5 +1,7 @@
 mod systemd_manager;
 mod install;
+mod consts;
+mod uninstall;
 
 use crate::Commands::Login;
 use anyhow::{Error, anyhow};
@@ -22,6 +24,7 @@ use simple_logger::SimpleLogger;
 use std::sync::Arc;
 use tokio::net::UnixListener;
 use crate::install::install;
+use crate::uninstall::uninstall;
 
 /// Bitwarden SSH Agent
 #[derive(Parser, Debug)]
@@ -54,6 +57,7 @@ enum Commands {
         sync_interval: u64,
     },
     Install,
+    Uninstall
 }
 
 async fn sync() -> anyhow::Result<()> {
@@ -328,6 +332,17 @@ async fn main() -> Result<(), Error> {
                 }
                 Err(e) => {
                     log::error!("install failed: {}", e);
+                    std::process::exit(1);
+                }
+            }
+        }
+        Commands::Uninstall => {
+            match uninstall(running_in_systemd).await {
+                Ok(_) => {
+                    log::info!("Uninstalled successfully.");
+                }
+                Err(e) => {
+                    log::error!("uninstall failed: {}", e);
                     std::process::exit(1);
                 }
             }
