@@ -128,6 +128,6 @@ bw-ssh-agent login \
 
 ## Notes
 
-- When installed with mise or vfox, the systemd unit points at the versioned install path, so re-run `bw-ssh-agent install` after upgrading.
+- When installed with mise or vfox, the plugin runs `bw-ssh-agent install` for you on every install or upgrade, so step 3 is not needed.
 - `SSH_AUTH_SOCK` is configured through systemd `environment.d` by `bw-ssh-agent install`; no shell profile changes are needed.
 - Socket path: `$XDG_RUNTIME_DIR/bw-ssh-agent.sock`
