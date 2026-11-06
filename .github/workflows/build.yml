@@ -50,7 +50,7 @@ jobs:
           fi
           sed -i.bak -E "s/^version = \".*\"/version = \"$VERSION\"/" crates/cli/Cargo.toml
           # Only the workspace package's own version changes; dependencies stay pinned.
-          cargo update --workspace --offline
+          cargo update --workspace
 
       - name: Build release binary
         run: cargo build --release --locked --target ${{ matrix.target }} -p bw-ssh-agent
