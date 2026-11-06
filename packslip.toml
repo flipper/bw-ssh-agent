@@ -1,0 +1,8 @@
+[[artifact]]
+path = "dist/bw-ssh-agent-plugin.tar.gz"
+format = "tar.gz"
+portable = true
+bin = []
+
+[artifact.extensions.mise]
+plugin = "vfox"

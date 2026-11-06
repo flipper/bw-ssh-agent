@@ -8,12 +8,35 @@ This project is unofficial and is not affiliated with or endorsed by Bitwarden.
 
 ## Requirements
 
-- Linux
+- Linux with systemd
 - Secret Service (usually already available on most Linux desktop setups)
 
 ## Quick Start
 
-1. Install `bw-ssh-agent` (choose one method):
+1. Install `bw-ssh-agent` with [mise](https://mise.jdx.dev/) (vfox backend):
+
+   ```bash
+   mise plugins install vfox:bw-ssh-agent 'packslip:flipper/bw-ssh-agent'
+   mise use -g vfox:bw-ssh-agent
+   ```
+
+   This installs the plugin from a signed [packslip](https://packslip.dev) release; mise verifies the signature before installing. To pin a plugin version, append `#<version>` to the packslip source, or in `mise.toml`:
+
+   ```toml
+   [plugins]
+   "vfox:bw-ssh-agent" = "packslip:flipper/bw-ssh-agent#1.0.0"
+   ```
+
+   <details>
+   <summary>Install with <a href="https://vfox.dev/">vfox</a></summary>
+
+   ```bash
+   vfox add --source https://github.com/flipper/bw-ssh-agent/releases/latest/download/bw-ssh-agent.zip bw-ssh-agent
+   vfox install bw-ssh-agent@latest
+   vfox use -g bw-ssh-agent
+   ```
+
+   </details>
 
    <details>
    <summary>Install manually (download binary)</summary>
@@ -35,37 +58,17 @@ This project is unofficial and is not affiliated with or endorsed by Bitwarden.
 
    </details>
 
-   <details>
-   <summary>Install with <a href="https://mise.jdx.dev/">mise</a></summary>
-
-   ```bash
-   mise use -g github:flipper/bw-ssh-agent
-   ```
-
-   </details>
-
 2. Log in:
 
    ```bash
    bw-ssh-agent login
    ```
 
-3. Set up background service (systemd, recommended):
+3. Set up the background systemd user service:
 
    ```bash
    bw-ssh-agent install
    ```
-
-   <details>
-   <summary>Other init systems</summary>
-
-   Configure your init/service manager to run this in the background:
-
-   ```bash
-   bw-ssh-agent agent
-   ```
-
-   </details>
 
 4. Reboot to apply all changes.
 
@@ -125,4 +128,6 @@ bw-ssh-agent login \
 
 ## Notes
 
+- When installed with mise or vfox, the systemd unit points at the versioned install path, so re-run `bw-ssh-agent install` after upgrading.
+- `SSH_AUTH_SOCK` is configured through systemd `environment.d` by `bw-ssh-agent install`; no shell profile changes are needed.
 - Socket path: `$XDG_RUNTIME_DIR/bw-ssh-agent.sock`
