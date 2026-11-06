@@ -128,6 +128,6 @@ bw-ssh-agent login \
 
 ## Notes
 
-- When installed with mise or vfox, the plugin runs `bw-ssh-agent install` for you on every install or upgrade (so step 3 is not needed), and `bw-ssh-agent uninstall` when the installed version is removed.
+- When installed with mise or vfox, the plugin runs `bw-ssh-agent install` for you on every install or upgrade (so step 3 is not needed), and `bw-ssh-agent uninstall` whenever an installed version is removed.
 - `SSH_AUTH_SOCK` is configured through systemd `environment.d` by `bw-ssh-agent install`; no shell profile changes are needed.
 - Socket path: `$XDG_RUNTIME_DIR/bw-ssh-agent.sock`
